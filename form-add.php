@@ -79,6 +79,9 @@ if ($_SERVER["REQUEST_METHOD"]=== "POST"){
 <body class="bg-dark text-white">
 
 <h1 class="display-2 text-center my-5">Aggiungi Libro:</h1>
+<div class="d-flex">
+         <a href="/S1-L5-Progetto/index.php" class="btn btn-outline-success mx-auto">Home</a>
+      </div>
     
 <div class="row justify-content-center mx-auto"> 
 <form action="" method="post" class="col-5  g-3 needs-validation " > 
@@ -116,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"]=== "POST"){
    
   
   <div class="col-12 justify-content-center d-flex">
-    <button class="btn btn-success mt-4" type="submit">Salva</button>
+    <button class="btn btn-success my-4" type="submit">Salva</button>
   </div>
 </form>
 

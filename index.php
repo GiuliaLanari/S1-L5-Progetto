@@ -48,19 +48,25 @@ $stmt= $pdo->query("SELECT * FROM libri");
 
 <?php
 foreach($stmt as $row){?>
-<div class="col-xs-12 col-md-3  g-3 mb-2 h-100">
-<div class="card bg-black text-white " >
+<div class="col-xs-12 col-md-3  g-3 mb-2">
+<div class="card bg-black text-white h-100 " >
 
-  <div class="card-body">
+  <div class="card-body d-flex flex-column">
     <img src="<?= $row["img"] ?>" class="card-img-top" style="height: 15rem; object-fit: cover;" alt="copertina libro">
     
     <h5 class="card-title display-6">Titolo: <?= $row["titolo"] ?></h5>
     <p class="card-text">Autore: <?= $row["autore"] ?></p>
     <p class="card-text">Pubblicazione: <?= $row["anno_pubblicazione"] ?></p>
     <p class="card-text">Genere: <?= $row["genere"] ?></p>
+
+
+    <div class="mt-auto">
     <a  href= "http://localhost/S1-L5-Progetto/form.php/?id=<?=$row['id'] ?>" class="btn btn-primary mt-2">Modifica</a>
     <a class="btn btn-danger mt-2" href=  "http://localhost/S1-L5-Progetto/delete.php/?id=<?=$row['id'] ?>">Delete</a>
     <a class="btn btn-info mt-2" href=  "http://localhost/S1-L5-Progetto/info.php/?id=<?=$row['id'] ?>">Info</a>
+
+    </div>
+   
   </div>
 </div>
 </div><?php
