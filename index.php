@@ -15,7 +15,21 @@ $options = [
 
 $pdo = new PDO($dsn, $user, $pass, $options);
 
-$stmt= $pdo->query("SELECT * FROM libri");
+$search= $_GET["search"] ?? "";
+
+$stmt= $pdo->prepare("SELECT * FROM libri WHERE titolo LIKE :search");
+$stmt->execute([
+  "search"=> "%$search%"
+]);
+
+$books= $stmt->fetchAll();
+
+
+$stmt = $pdo->prepare("SELECT COUNT(*)  FROM libri WHERE titolo LIKE :search");
+$stmt->execute([
+ 
+  "search"=> "%&search%"
+]);
 
 ?>
 
@@ -32,14 +46,16 @@ $stmt= $pdo->query("SELECT * FROM libri");
 <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
   <div class="container-fluid text-white">
   <h1 class="display-6">Libreria</h1>
-  <div class="text-center" >
+  <div class="ms-auto me-5" >
 <a class="btn btn-success  " href= "http://localhost/S1-L5-Progetto/form-add.php">Add New</a>
 </div>  
 
-      <!-- <form class="d-flex" role="search" action="" method="get">
+      <form class="d-flex" role="search" action="" method="get">
         <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search" name="search" value="<?= $search ?>">
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form> -->
+      </form>
+
+      
     </div>
   </div>
 </nav>
@@ -47,7 +63,7 @@ $stmt= $pdo->query("SELECT * FROM libri");
 <div class="row">
 
 <?php
-foreach($stmt as $row){?>
+foreach($books as $row){?>
 <div class="col-xs-12 col-md-3  g-3 mb-2">
 <div class="card bg-black text-white h-100 " >
 
