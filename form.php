@@ -15,13 +15,63 @@ $options = [
 $pdo = new PDO($dsn, $user, $pass, $options);
 
 
-$id = $_GET['id'];
-
-$stmt = $pdo->prepare("SELECT * FROM libri WHERE id = ?");
-$stmt->execute([$id]);
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$errors =[];
 
 
+
+if ($_SERVER["REQUEST_METHOD"]=== "POST"){
+    
+    
+  $titolo = $_POST ["titolo"]?? "";
+  $autore = $_POST ["autore"]?? "";
+  $anno_pubblicazione = $_POST ["anno_pubblicazione"]?? "";
+  $genere = $_POST ["genere"]?? "";
+  $id = $_POST['id'];
+  $img = $_POST['img']?? "";
+  
+  
+
+  if(strlen($titolo)=== 0){
+      $errors["titolo"]= "Il titolo non è stato inserito";
+  }
+
+  if(strlen($autore)=== 0){
+      $errors["autore"]= "Autore non inserito";
+  }
+
+  if(strlen($anno_pubblicazione)=== 0){
+      $errors["anno_pubblicazione"]= "Anno publicazione non inserito";
+  }
+
+  if(strlen($genere)=== 0 ){
+      $errors["genere"]= "Genere non inserito";
+  }
+
+  if($errors===[]){
+
+      $stmt = $pdo->prepare("UPDATE libri SET titolo= :titolo, autore= :autore, anno_pubblicazione= :anno_pubblicazione, genere= :genere, img= :img WHERE id=:id");
+  $stmt->execute([
+  'id'=> $id,
+  'titolo' => $titolo,
+  'autore' => $autore,
+  'genere' => $genere,
+  'anno_pubblicazione' => $anno_pubblicazione ,
+  'img'=> $img,
+]);
+
+
+      header("Location: /S1-L5-Progetto/index.php");
+  }
+
+}
+
+if($_SERVER["REQUEST_METHOD"]=== "GET" || $errors !== []){
+  $id = $_GET['id'];
+
+  $stmt = $pdo->prepare("SELECT * FROM libri WHERE id = ?");
+  $stmt->execute([$id]);
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -38,7 +88,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <body class="bg-dark text-white">
     <h1 class="display-2 text-center my-5">Modifica:</h1>
 <div class="row justify-content-center mx-auto"> 
-<form action="/S1-L5-Progetto/edit.php" method="post" class="col-5  g-3 needs-validation " > 
+<form action="" method="post" class="col-5  g-3 needs-validation " > 
 <input type="hidden" name="id" value="<?= $id ?>">
     <div>
 
@@ -53,22 +103,26 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
   <div class="col-md-12" >
     <label for="titolo" class="form-label">Titolo:</label>
     <input type="text" name="titolo" class="form-control " id="titolo" placeholder="Titolo" value="<?=$row["titolo"] ?>" >
+    <div class="error text-danger "><?= $errors["titolo"]?? "" ?></div>
   
   </div>
   <div class="col-md-12">
     <label for="autore" class="form-label">Autore:</label>
     <input type="text" class="form-control" name="autore" id="autore" placeholder="Autore" value="<?=$row["autore"] ?>">
+    <div class="error text-danger "><?= $errors["autore"]?? "" ?></div>
    
   </div>
 
   <div class="col-md-12">
       <label for="anno_pubblicazione" class="form-label">Anno pubblicazione:</label>
       <input type="number" class="form-control" name="anno_pubblicazione" id="anno_pubblicazione" placeholder="Anno pubblicazione" value="<?=$row["anno_pubblicazione"] ?>" >
+      <div class="error text-danger "><?= $errors["anno_pubblicazione"]?? "" ?></div>
       
     </div>
   <div class="col-md-12">
       <label for="genere" class="form-label">Genere:</label>
       <input type="text" class="form-control" name="genere" id="genere" placeholder="Genere" value="<?=$row["genere"] ?>">
+      <div class="error text-danger "><?= $errors["genere"]?? "" ?></div>
       
     </div>
    

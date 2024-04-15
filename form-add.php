@@ -16,6 +16,54 @@ $pdo = new PDO($dsn, $user, $pass, $options);
 
 
 
+if ($_SERVER["REQUEST_METHOD"]=== "POST"){
+    
+    
+  $titolo = $_POST ["titolo"]?? "";
+  $autore = $_POST ["autore"]?? "";
+  $anno_pubblicazione = $_POST ["anno_pubblicazione"]?? "";
+  $genere = $_POST ["genere"]?? "";
+  $img = $_POST['img']?? "";
+  
+  $errors =[];
+
+  if(strlen($titolo)=== 0){
+      $errors["titolo"]= "Il titolo non è stato inserito";
+  }
+
+  if(strlen($autore)=== 0){
+      $errors["autore"]= "Autore non inserito";
+  }
+
+  if(strlen($anno_pubblicazione)=== 0){
+      $errors["anno_pubblicazione"]= "Anno publicazione non inserito";
+  }
+
+  if(strlen($genere)=== 0 ){
+      $errors["genere"]= "Genere non inserito";
+  }
+
+  if($errors===[]){
+      
+    $stmt = $pdo->prepare("INSERT INTO libri (titolo, autore, anno_pubblicazione, genere, img) VALUES (:titolo, :autore, :anno_pubblicazione, :genere, :img)");
+    $stmt->execute([
+        'titolo' => $titolo,
+        'autore' => $autore,
+        'anno_pubblicazione' => $anno_pubblicazione,
+        'genere' => $genere ,
+        'img' => $img
+    ]);
+
+
+      header("Location: /S1-L5-Progetto/index.php");
+  }
+
+}
+
+
+
+
+
 ?>
 
 
@@ -33,7 +81,7 @@ $pdo = new PDO($dsn, $user, $pass, $options);
 <h1 class="display-2 text-center my-5">Aggiungi Libro:</h1>
     
 <div class="row justify-content-center mx-auto"> 
-<form action="/S1-L5-Progetto/add.php" method="post" class="col-5  g-3 needs-validation " > 
+<form action="" method="post" class="col-5  g-3 needs-validation " > 
     <div>
     <div class="col-md-12" >
   <label for="img" class="form-label">Immagine:</label>
@@ -45,24 +93,25 @@ $pdo = new PDO($dsn, $user, $pass, $options);
   <div class="col-md-12" >
     <label for="titolo" class="form-label">Titolo:</label>
     <input type="text" name="titolo" class="form-control " id="titolo" placeholder="Titolo" >
+    <div class="error text-danger "><?= $errors["titolo"]?? "" ?></div>
   
   </div>
   
   <div class="col-md-12">
     <label for="autore" class="form-label">Autore:</label>
     <input type="text" class="form-control" name="autore" id="autore" placeholder="Autore" >
-   
+    <div class="error text-danger "><?= $errors["autore"]?? "" ?></div>
   </div>
 
   <div class="col-md-12">
       <label for="anno_pubblicazione" class="form-label">Anno pubblicazione:</label>
       <input type="number" class="form-control" name="anno_pubblicazione" id="anno_pubblicazione" placeholder="Anno pubblicazione"  >
-      
+      <div class="error text-danger "><?= $errors["anno_pubblicazione"]?? "" ?></div>
     </div>
   <div class="col-md-12">
       <label for="genere" class="form-label">Genere:</label>
       <input type="text" class="form-control" name="genere" id="genere" placeholder="Genere">
-      
+      <div class="error text-danger "><?= $errors["genere"]?? "" ?></div>
     </div>
    
   

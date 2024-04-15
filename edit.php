@@ -44,14 +44,10 @@ if ($_SERVER["REQUEST_METHOD"]=== "POST"){
         $errors["genere"]= "Genere non inserito";
     }
 
+    if($errors===[]){
 
-
-}
-
-
-
-$stmt = $pdo->prepare("UPDATE libri SET titolo= :titolo, autore= :autore, anno_pubblicazione= :anno_pubblicazione, genere= :genere, img= :img WHERE id=:id");
-$stmt->execute([
+        $stmt = $pdo->prepare("UPDATE libri SET titolo= :titolo, autore= :autore, anno_pubblicazione= :anno_pubblicazione, genere= :genere, img= :img WHERE id=:id");
+    $stmt->execute([
     'id'=> $id,
     'titolo' => $titolo,
     'autore' => $autore,
@@ -61,5 +57,8 @@ $stmt->execute([
 ]);
 
 
+        header("Location: /S1-L5-Progetto/index.php");
+    }
 
-header("Location: /S1-L5-Progetto/index.php");
+}
+
